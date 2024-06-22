@@ -8,10 +8,15 @@ public class Level : MonoBehaviour
     public event LevelDelegate OnLevelCompleted;
     public event LevelDelegate OnLevelChanged;
 
+    protected MapParam mapParam;
     //public virtual void Setup(PlayerHandle player)
     //{
     //    this.player = player;
     //}
+    public virtual void OnStart(MapParam mParam)
+    {
+        mapParam = mParam;
+    }
     public virtual void OnEnter()
     {
         gameObject.SetActive(true);

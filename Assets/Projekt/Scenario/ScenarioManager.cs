@@ -10,16 +10,17 @@ public class ScenarioManager : MonoBehaviour
     [SerializeField] private List<Level> levels = new List<Level>();
 
     private int currentLevelIndex;
+    private MapParam mParam;
 
     private void Start()
     {
         currentLevelIndex = 0;
- //       player.OnStart();
-
-        //foreach (var level in levels)
-        //{
-        //    level.Setup(player);
-        //}
+        //       player.OnStart();
+        mParam = new MapParam();
+        foreach (var level in levels)
+        {
+            level.OnStart(mParam);
+        }
 
         levels[currentLevelIndex].OnEnter();
         levels[currentLevelIndex].OnLevelCompleted += OnLevelCompleted;
@@ -57,4 +58,18 @@ public class ScenarioManager : MonoBehaviour
         levels[currentLevelIndex].OnLevelChanged += OnLevelChanged;
     }
 
+    private void Update()
+    {
+        foreach (var level in levels)
+        {
+            level.OnUpdate();
+        }
+    }
+}
+public class MapParam
+{
+    public int Size;
+    public Vector2Int StartIndex;
+    public Vector2Int EndIndex;
+    public float BlockProbability;
 }
