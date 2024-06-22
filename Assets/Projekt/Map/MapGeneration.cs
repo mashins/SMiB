@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -36,11 +35,13 @@ public class MapGeneration : MonoBehaviour
         mainCamera.orthographicSize = (float)this.mapSize / 2;
         float width = mainCamera.aspect * mainCamera.orthographicSize * 2;
         float offsetValue = cameraOffset * width / Screen.width;
-        
+
         mainCamera.transform.position = new Vector3((float)this.mapSize / 2 - offsetValue / 2, (float)this.mapSize / 2, -10);
 
+        Vector2Int endPos = new Vector2Int(this.mapSize - 1, 2);
+        PathFinding.instance.InitSize(this.mapSize);
+        PathFinding.instance.InitEndDestination(endPos);
     }
-
 }
 
 public struct MapParam

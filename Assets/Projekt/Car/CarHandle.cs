@@ -15,6 +15,49 @@ public class CarHandle : MonoBehaviour
     private Dictionary<Vector2Int, bool> passedNodes = new Dictionary<Vector2Int, bool>();
     private Dictionary<Vector2Int, bool> blockedNodes = new Dictionary<Vector2Int, bool>();
 
+    private List<Vector2Int> newPath;
+    private int currentPathIndex = 0;
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            NextStep();
+        }
+    }
+
+    private void NextStep()
+    {
+        if (newPath == null)
+            newPath = PathFinding.instance.FindPath(GetCurrentIndex());
+
+        if (currentPathIndex >= newPath.Count - 1 || newPath.Count == 0)
+            return; //Found destination, or not found path
+
+        float rand = Random.Range(0.0f, 1.0f);
+        float p = 0.4f;
+
+        if (rand < p)
+        {
+            //Add visited roads
+            PathFinding.instance.DisableConnection(newPath[currentPathIndex], newPath[currentPathIndex + 1]);
+            newPath = PathFinding.instance.FindPath(newPath[currentPathIndex]);
+            currentPathIndex = 0;
+        }
+        else
+        {
+            currentPathIndex++;
+            Vector2Int NewPathPostion = newPath[currentPathIndex];
+            transform.position = (Vector2)NewPathPostion + new Vector2(0.5f, 0.5f);
+        }
+    }
+
+    private Vector2Int GetCurrentIndex()
+    {
+        Vector2 newPos = transform.position - new Vector3(0.5f, 0.5f);
+        return new Vector2Int((int)newPos.x, (int)newPos.y);
+    }
+
     public void OnSetup(MapParam mParam)
     {
         this.mParam = mParam;
@@ -23,13 +66,13 @@ public class CarHandle : MonoBehaviour
 
     public void OnStart()
     {
-        transform.position = (Vector2)mParam.StartIndex;
+        transform.position = (Vector2)mParam.StartIndex + new Vector2(0.5f, 0.5f);
     }
 
 
     private void OnIndexChange()
     {
-        
+
     }
 
     private Vector2Int GetNextNode()

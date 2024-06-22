@@ -10,7 +10,4 @@ public class LevelMenu : Level
     {
         ChangeLevel(gameplayID);
     }
-
-
-
 }

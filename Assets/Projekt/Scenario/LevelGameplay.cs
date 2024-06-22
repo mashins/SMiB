@@ -9,13 +9,11 @@ public class LevelGameplay : Level
 
     public void Setup(MapParam mParam)
     {
-
         carHandle.OnSetup(mParam);
     }
 
     public override void OnEnter()
     {
- 
 
     }
 
