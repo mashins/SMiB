@@ -9,7 +9,7 @@ public class MapGeneration : MonoBehaviour
     [SerializeField] private int cameraOffset = 300;
 
     [SerializeField] private Tilemap tileMap;
-    [SerializeField] private Tile crossTile;
+    [SerializeField] private TileBase crossTile;
     [SerializeField] private GameObject start;
     [SerializeField] private GameObject end;
 
