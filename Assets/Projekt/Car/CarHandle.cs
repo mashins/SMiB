@@ -142,6 +142,7 @@ public class CarHandle : MonoBehaviour
 
         passedPath.positionCount = 2;
         passedPath.SetPosition(0, transform.position);
+        passedPath.SetPosition(1, transform.position);
 
         CheckMoveDirection();
     }
