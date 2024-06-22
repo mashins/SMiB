@@ -50,11 +50,9 @@ public class LevelGameplay : Level
     }
     public override void OnExit()
     {
+
         base.OnExit();
-        for (int i = 0; i < allBlockadesVisual.Count; i++)
-        {
-            allBlockadesVisual[i].SetActive(false);
-        }
+
     }
     public override void OnUpdate()
     {
@@ -63,6 +61,10 @@ public class LevelGameplay : Level
 
     public void OnBackClick()
     {
+        for (int i = 0; i < allBlockadesVisual.Count; i++)
+        {
+            allBlockadesVisual[i].SetActive(false);
+        }
         ChangeLevel(menuId);
     }
 

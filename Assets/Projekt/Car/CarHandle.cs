@@ -1,13 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+using TMPro;
 
 public class CarHandle : MonoBehaviour
 {
     [SerializeField] private float carSpeed;
     [SerializeField] private LineRenderer passedPath;
     [SerializeField] private LineRenderer currentPath;
+
+    [SerializeField] private TextMeshProUGUI textMeshState;
+    [SerializeField] private TextMeshProUGUI textMeshTime;
+    [SerializeField] private TextMeshProUGUI textMeshCrossCount;
+    [SerializeField] private TextMeshProUGUI textMeshBlockadeCount;
+
+    private int time;
+    private int crossCount;
+    private int blockadeCount;
+
 
     private MapParam mParam;
 
@@ -31,6 +41,8 @@ public class CarHandle : MonoBehaviour
             newPath = PathFinding.instance.FindPath(GetCurrentIndex());
 
         blocked = false;
+        time++;
+        textMeshTime.text = time.ToString();
         if (currentPathIndex >= newPath.Count - 1 || newPath.Count == 0)
             return true; //Found destination, or not found path
 
@@ -42,6 +54,8 @@ public class CarHandle : MonoBehaviour
             //Add visited roads
             if (PathFinding.instance.DisableConnection(newPath[currentPathIndex], newPath[currentPathIndex + 1]))
             {
+                blockadeCount++;
+                textMeshBlockadeCount.text = blockadeCount.ToString();
                 Debug.Log("Block");
                 blocked = true;
                // Debug.DrawLine((Vector2)newPath[currentPathIndex] + new Vector2(0.5f, 0.5f), (Vector2)newPath[currentPathIndex + 1] + new Vector2(0.5f, 0.5f), Color.blue, 100);
@@ -53,6 +67,8 @@ public class CarHandle : MonoBehaviour
 
         }
 
+        crossCount++;
+        textMeshCrossCount.text = crossCount.ToString();
 
 
         PathFinding.instance.SaveConnection(newPath[currentPathIndex], newPath[currentPathIndex + 1]);
@@ -109,6 +125,15 @@ public class CarHandle : MonoBehaviour
     {
         if (mParam == null) return;
 
+        time = 0;
+        crossCount = 0;
+        blockadeCount = 0;
+
+        textMeshState.text = "Porusza siê";
+        textMeshTime.text = time.ToString();
+        textMeshBlockadeCount.text = blockadeCount.ToString();
+        textMeshCrossCount.text = crossCount.ToString();
+
         PathFinding.instance.InitEndDestination(mParam.EndIndex);
         transform.position = (Vector2)mParam.StartIndex + new Vector2(0.5f, 0.5f);
 
@@ -148,7 +173,21 @@ public class CarHandle : MonoBehaviour
         {
             isBlocked = false;
 
-            if (NextStep(out isBlocked)) return;
+            if (NextStep(out isBlocked))
+            {
+                if ((transform.position - (Vector3)(mParam.EndIndex + new Vector2(0.5f, 0.5f))).magnitude < 0.5f)
+                {
+                    textMeshState.text = "Osi¹gniêto cel";
+                }
+                else
+                {
+                    textMeshState.text = "Droga do celu jest zablokowana";
+                }
+
+                return;
+            }
+
+
         }
 
         StartMove();
